@@ -32,7 +32,7 @@ public class Exercice {
 
 
     @Column(name = "is_default")
-    private boolean isDefault;
+    private Boolean isDefault;
 
     @ManyToOne
     private Users users
