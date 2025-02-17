@@ -23,11 +23,14 @@ public class Exercice {
     private String labelExercice;
 
     @Column(name = "date_start")
-    private String dateStart;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateStart;
 
     @Column(name = "date_end")
-    private String dateEnd;
-    
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime dateEnd;
+
+
     @Column(name = "is_default")
     private boolean isDefault;
 
