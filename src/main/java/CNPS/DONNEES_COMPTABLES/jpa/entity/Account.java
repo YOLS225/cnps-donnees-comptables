@@ -1,10 +1,6 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
-import org.checkerframework.common.aliasing.qual.Unique;
-
-import java.time.LocalDateTime;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -32,12 +28,9 @@ public class Account {
     @Column(name = "parent_account")
     private String parentAccount;
 
-    @Column(name = "type")
-    private String status;
+    @ManyToOne
+    private AccountingPlan AccountingPlan;
 
     @ManyToOne
-    private Accounting_Plan accounting_Plan;
-
-    @ManyToOne
-    private Account_Class accounting_Class;
+    private AccountClass accountingClass;
 }

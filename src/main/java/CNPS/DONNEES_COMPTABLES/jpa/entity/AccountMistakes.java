@@ -9,20 +9,19 @@ import java.util.UUID;
 @Setter
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "accounting_plan")
-public class AccountingPlan {
+@Table(name = "account_mistakes")
+public class AccountMistakes {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @Column(name="id_mistakes_account", nullable = false )
     private UUID id;
 
-    @Column(name = "number_account")
-    private String numberAccount;
+    @Column (name ="label_account")
+    private String labelAccount;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "cell_number")
+    private String cellNumber;
 
-    @Column(name = "type")
-    private String type;
-
+    @ManyToOne
+    private RowBalance rowBalance;
 }

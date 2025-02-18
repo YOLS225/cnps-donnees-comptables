@@ -1,9 +1,6 @@
-package CNPS.DONNEES_COMPTABLES.jpa.entity
-import com.fasterxml.jackson.annotation.JsonFormat;
+package CNPS.DONNEES_COMPTABLES.jpa.entity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -13,7 +10,7 @@ import java.util.UUID;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "balance_mistakes")
-public class Balance_mistakes {
+public class BalanceMistakes {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_mistake_balance", nullable = false )
@@ -25,7 +22,6 @@ public class Balance_mistakes {
     @Column(name = "result_mistake_balance")
     private String resultMistakeAccount;
 
-
     @ManyToOne
-    private Row_balance row_balance;
+    private RowBalance rowBalance;
 }

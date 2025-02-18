@@ -1,9 +1,6 @@
-package CNPS.DONNEES_COMPTABLES.jpa.entity
-import com.fasterxml.jackson.annotation.JsonFormat;
+package CNPS.DONNEES_COMPTABLES.jpa.entity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -13,7 +10,7 @@ import java.util.UUID;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "row_balance")
-public class Row_balance {
+public class RowBalance {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_row_balance", nullable = false )

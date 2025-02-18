@@ -2,8 +2,7 @@ package CNPS.DONNEES_COMPTABLES.jpa.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -89,7 +88,7 @@ public class Company {
     private String nrc;
 
     @Column(name = "name_contact_person")
-    private String nameContacterson;
+    private String nameContactPerson;
 
     @Column(name = "code_main_activity")
     private String codeMainActivity;
@@ -110,8 +109,8 @@ public class Company {
     private String numberEstablishementIn;
 
     @Column(name = "start_exercice")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime startExercice;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startExercice;
 
     @Column(name = "number_establishement_out")
     private String numberEstablishementOut;

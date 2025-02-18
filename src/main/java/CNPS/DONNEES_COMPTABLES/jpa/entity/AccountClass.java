@@ -1,10 +1,6 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
-import org.checkerframework.common.aliasing.qual.Unique;
-
-import java.time.LocalDateTime;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor

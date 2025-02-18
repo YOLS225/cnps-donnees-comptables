@@ -1,9 +1,8 @@
-package CNPS.DONNEES_COMPTABLES.jpa.entity
+package CNPS.DONNEES_COMPTABLES.jpa.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -23,22 +22,22 @@ public class Exercice {
     private String labelExercice;
 
     @Column(name = "date_start")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime dateStart;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateStart;
 
     @Column(name = "date_end")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime dateEnd;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateEnd;
 
 
     @Column(name = "is_default")
     private Boolean isDefault;
 
     @ManyToOne
-    private Users users
+    private Users users;
 
     @ManyToOne
-    private Accounting_plan accounting_plan
+    private AccountingPlan accountingPlan;
 
     @ManyToOne
     private Company company;
