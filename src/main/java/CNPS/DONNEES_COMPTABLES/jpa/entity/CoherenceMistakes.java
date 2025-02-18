@@ -14,7 +14,7 @@ public class CoherenceMistakes {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_coherence", nullable = false )
-    private UUID id_coherence;
+    private UUID idCoherence;
 
     @Column (name ="label_coherence")
     private String labelCoherence;

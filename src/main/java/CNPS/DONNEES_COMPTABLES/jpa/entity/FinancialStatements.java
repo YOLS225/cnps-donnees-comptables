@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class FinancialStatements {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_financial_statements", nullable = false )
-    private UUID id_financial_statements;
+    private UUID idFinancialStatements;
 
     @Column (name ="lib_financial_statements")
     private String labelExercice;
@@ -26,7 +27,7 @@ public class FinancialStatements {
     private LocalDate creationDateFinancialStatements;
 
     @Column(name = "status_financial_statements")
-    private String statusFinancialStatetments;
+    private String statusFinancialStatements;
 
     @ManyToOne
     private Users users;

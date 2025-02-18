@@ -13,8 +13,8 @@ import java.util.UUID;
 public class AccountClass {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+    @Column(name = "id_account_class", nullable = false)
+    private UUID idAccountClass;
 
     @Column(name = "reference")
     private String reference;

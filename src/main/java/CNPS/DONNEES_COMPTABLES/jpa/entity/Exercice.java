@@ -16,7 +16,7 @@ public class Exercice {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_exercice", nullable = false )
-    private UUID id_exercice;
+    private UUID idExercice;
 
     @Column (name ="lib_exercice")
     private String labelExercice;

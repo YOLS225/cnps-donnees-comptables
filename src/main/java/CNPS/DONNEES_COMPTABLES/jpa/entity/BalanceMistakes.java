@@ -14,7 +14,7 @@ public class BalanceMistakes {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_mistake_balance", nullable = false )
-    private UUID id_mistake_balance;
+    private UUID idBalanceMistakes;
 
     @Column (name ="label_mistake_balance")
     private String labelMistakeBalance;

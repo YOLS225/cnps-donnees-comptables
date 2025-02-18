@@ -14,7 +14,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_users", nullable = false )
-    private UUID id_users;
+    private UUID idUsers;
 
     @Column (name ="last_name_users")
     private String lastNameUsers;
