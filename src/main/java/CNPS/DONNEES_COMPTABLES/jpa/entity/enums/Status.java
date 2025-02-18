@@ -1,0 +1,13 @@
+package CNPS.DONNEES_COMPTABLES.jpa.entity.enums;
+
+public enum Status {
+  ACTIVE,
+  INACTIVE,
+  NON_TREATED,
+  IN_PROCESS,
+  ARCHIVED,
+  UNARCHIVED,
+  VISIBLE,
+  UNVISIBLE,
+  FINISHED
+}

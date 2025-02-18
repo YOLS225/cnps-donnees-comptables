@@ -1,4 +1,5 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.UUID;
@@ -27,6 +28,9 @@ public class Users {
 
     @Column(name = "last_connexion_users")
     private String lastConnexionUsers;
+
+    @ManyToOne
+    private Status status;
 
     @Column(name = "status_users")
     private String statusUsers;

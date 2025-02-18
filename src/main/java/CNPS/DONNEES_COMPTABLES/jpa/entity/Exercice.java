@@ -1,4 +1,5 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,9 @@ public class Exercice {
 
     @Column(name = "is_default")
     private Boolean isDefault;
+
+    @ManyToOne
+    private Status status;
 
     @ManyToOne
     private Users users;

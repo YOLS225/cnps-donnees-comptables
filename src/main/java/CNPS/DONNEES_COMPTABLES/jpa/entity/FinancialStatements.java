@@ -1,9 +1,11 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
+import java.util.Stack;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -28,6 +30,9 @@ public class FinancialStatements {
 
     @Column(name = "status_financial_statements")
     private String statusFinancialStatements;
+
+    @ManyToOne
+    private Status status;
 
     @ManyToOne
     private Users users;
