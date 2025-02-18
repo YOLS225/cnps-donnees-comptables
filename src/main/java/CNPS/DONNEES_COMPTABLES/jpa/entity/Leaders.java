@@ -16,23 +16,23 @@ public class Leaders {
     @Column(name="id_leaders", nullable = false )
     private UUID idLeaders;
 
-    @Column(name = "name_leaders")
-    private String nameLeaders;
+    @Column(name = "lastname")
+    private String name;
 
-    @Column(name = "first_name_leaders")
-    private String firstNameLeaders;
+    @Column(name = "firstname")
+    private String firstName;
 
-    @Column(name = "fiscal_id_leaders")
-    private String fiscalIdLeaders;
+    @Column(name = "fiscal_id")
+    private String fiscalId;
 
-    @Column(name = "function_leaders")
-    private String functionLeaders;
+    @Column(name = "function")
+    private String function;
 
-    @Column(name = "address_leaders")
-    private String addressLeaders;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "nationality_leaders")
-    private String nationalityLeaders;
+    @Column(name = "nationality")
+    private String nationality;
 
     @ManyToOne
     private Company company;

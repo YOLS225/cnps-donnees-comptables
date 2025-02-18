@@ -16,23 +16,23 @@ public class Associates {
     @Column(name="id_associates", nullable = false )
     private UUID idAssociates;
 
-    @Column (name ="name_associates")
-    private String nameAssociates;
+    @Column (name ="lastname")
+    private String lastName;
 
-    @Column(name = "first_name_associates")
-    private String firstNameAssociates;
+    @Column(name = "firstname")
+    private String firstName;
 
-    @Column(name = "function_associates")
-    private String functionAssociates;
+    @Column(name = "function")
+    private String function;
 
-    @Column(name = "percentage_associates")
-    private String percentageAssociates;
+    @Column(name = "percentage")
+    private String percentage;
 
-    @Column(name = "address_associates")
-    private String addressAssociates;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "nationality_associates")
-    private String nationalityAssociates;
+    @Column(name = "nationality")
+    private String nationality;
 
     @ManyToOne
     private Company company;

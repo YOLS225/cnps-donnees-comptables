@@ -16,23 +16,23 @@ public class BoardMembers {
     @Column(name="id_members", nullable = false )
     private UUID idMembers;
 
-    @Column (name ="name_members")
-    private String nameMembers;
+    @Column (name ="lastname")
+    private String lastName;
 
-    @Column(name = "first_name_members")
-    private String firstNameMembers;
+    @Column(name = "firstname")
+    private String firstName;
 
-    @Column(name = "structure_members")
-    private String structureMembers;
+    @Column(name = "structure")
+    private String structure;
 
-    @Column(name = "percentage_members")
-    private String percentageMembers;
+    @Column(name = "percentage")
+    private String percentage;
 
-    @Column(name = "address_members")
-    private String addressMembers;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "nationality_members")
-    private String nationalityMembers;
+    @Column(name = "nationality")
+    private String nationality;
 
     @ManyToOne
     private Company company;

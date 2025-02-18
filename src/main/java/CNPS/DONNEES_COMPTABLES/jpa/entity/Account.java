@@ -1,4 +1,5 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Status;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.UUID;
@@ -25,8 +26,11 @@ public class Account {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "parent_account")
-    private String parentAccount;
+//    @Column(name = "parent_account")
+//    private String parentAccount;
+
+    @ManyToOne
+    private Status status;
 
     @ManyToOne
     private AccountingPlan AccountingPlan;
