@@ -14,7 +14,7 @@ public class AccountClass {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_account_class", nullable = false)
-    private UUID idAccountClass;
+    private UUID id;
 
     @Column(name = "reference")
     private String reference;

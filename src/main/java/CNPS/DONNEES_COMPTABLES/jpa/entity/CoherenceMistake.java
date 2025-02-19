@@ -10,7 +10,7 @@ import java.util.UUID;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "coherence_mistakes")
-public class CoherenceMistakes {
+public class CoherenceMistake {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_coherence", nullable = false )

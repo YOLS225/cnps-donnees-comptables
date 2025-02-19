@@ -1,11 +1,9 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
-import CNPS.DONNEES_COMPTABLES.jpa.entity.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
-import java.util.Stack;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -15,16 +13,16 @@ import java.util.UUID;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "financial_statements")
-public class FinancialStatements {
+public class FinancialStatement {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_financial_statements", nullable = false )
-    private UUID idFinancialStatements;
+    private UUID id;
 
-    @Column (name ="lib_financial_statements")
-    private String labelExercice;
+    @Column (name ="label")
+    private String label;
 
-    @Column(name = "creation_date_finanacial_statements")
+    @Column(name = "creation_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDateFinancialStatements;
 
@@ -32,7 +30,7 @@ public class FinancialStatements {
     private Status status;
 
     @ManyToOne
-    private Users users;
+    private User users;
 
     @ManyToOne
     private Exercice exercice;

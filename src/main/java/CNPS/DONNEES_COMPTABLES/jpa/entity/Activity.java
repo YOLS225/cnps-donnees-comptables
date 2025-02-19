@@ -14,7 +14,7 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_activity", nullable = false)
-    private UUID idActivity;
+    private UUID id;
 
     @Column(name = "name")
     private String name;

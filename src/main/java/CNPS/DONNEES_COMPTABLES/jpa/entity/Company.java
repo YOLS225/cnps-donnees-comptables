@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_company", nullable = false)
-    private UUID idCompany;
+    private UUID id;
 
     @Column(name = "name")
     private String name;
@@ -120,4 +121,19 @@ public class Company {
 
     @Column(name = "logo")
     private String logo;
+
+//    @OneToMany
+//    private List<Bank> banks;
+//
+//    @OneToMany
+//    private List<Associate> associates;
+//
+//    @OneToMany
+//    private List<Activity> activities;
+//
+//    @OneToMany
+//    private List<Leader> leaders;
+//
+//    @OneToMany
+//    private List<BoardMember> boardMembers;
 }

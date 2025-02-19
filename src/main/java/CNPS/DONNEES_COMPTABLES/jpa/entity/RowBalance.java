@@ -14,7 +14,7 @@ public class RowBalance {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_row_balance", nullable = false )
-    private UUID idRowBalance;
+    private UUID id;
 
     @Column (name ="label_row_balance")
     private String labelRowBalance;

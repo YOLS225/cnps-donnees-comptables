@@ -10,11 +10,11 @@ import java.util.UUID;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "account_mistakes")
-public class AccountMistakes {
+public class AccountMistake {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_account_mistakes", nullable = false )
-    private UUID idAccountMistakes;
+    private UUID id;
 
     @Column (name ="label_account")
     private String labelAccount;

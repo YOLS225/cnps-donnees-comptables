@@ -1,6 +1,8 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Optional;
 import java.util.UUID;
 @Builder
 @AllArgsConstructor
@@ -14,7 +16,7 @@ public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_bank", nullable = false)
-    private UUID idBank;
+    private UUID id;
 
     @Column(name = "name")
     private String name;

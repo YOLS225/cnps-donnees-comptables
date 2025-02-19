@@ -1,5 +1,4 @@
 package CNPS.DONNEES_COMPTABLES.jpa.entity;
-import CNPS.DONNEES_COMPTABLES.jpa.entity.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,10 +16,10 @@ public class Exercice {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="id_exercice", nullable = false )
-    private UUID idExercice;
+    private UUID id;
 
-    @Column (name ="lib_exercice")
-    private String labelExercice;
+    @Column (name ="libal")
+    private String label;
 
     @Column(name = "date_start")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -38,7 +37,7 @@ public class Exercice {
     private Status status;
 
     @ManyToOne
-    private Users users;
+    private User users;
 
     @ManyToOne
     private AccountingPlan accountingPlan;

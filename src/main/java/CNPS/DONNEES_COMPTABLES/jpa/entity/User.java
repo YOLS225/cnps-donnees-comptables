@@ -9,12 +9,12 @@ import java.util.UUID;
 @Setter
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "board_members")
-public class BoardMembers {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name="id_members", nullable = false )
-    private UUID idMembers;
+    @Column(name="id_users", nullable = false )
+    private UUID id;
 
     @Column (name ="lastname")
     private String lastName;
@@ -22,17 +22,11 @@ public class BoardMembers {
     @Column(name = "firstname")
     private String firstName;
 
-    @Column(name = "structure")
-    private String structure;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "percentage")
-    private String percentage;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "nationality")
-    private String nationality;
+    @ManyToOne
+    private Status status;
 
     @ManyToOne
     private Company company;
