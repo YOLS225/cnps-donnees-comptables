@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface IBank {
     Action<Bank> saveBank(BankDTO bankDTO);
     List<Bank> findAllBanks();
+    List<Bank> filterBanks(String searchTerm);
 }

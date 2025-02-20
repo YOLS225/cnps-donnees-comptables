@@ -1,6 +1,7 @@
 package CNPS.DONNEES_COMPTABLES.rest;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.IBoardMember;
 import CNPS.DONNEES_COMPTABLES.dto.*;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +38,13 @@ public class BoardMemberController {
     public RestResponse<List<BoardMember>> findAllBoardMembers() {
         List<BoardMember> value = boardMemberService.findAllBoardMembers();
         return RestResponse.success(value);
+    }
+
+    @GetMapping("/filter")
+    @Operation(summary = "filter the board-members with a term")
+    public List<BoardMember> filterBoardMembers(@RequestParam String searchTerm) {
+        List<BoardMember> result=boardMemberService.filterBoardMembers(searchTerm);
+        return result;
     }
 
 }

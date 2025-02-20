@@ -8,8 +8,10 @@ import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.ActivityRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,5 +54,19 @@ public class ActivityService implements IActivity {
     public List<Activity> findAllActivities() {
         List<Activity> result = activityRepository.findAll();
         return result;
+    }
+
+    @Override
+    public List<Activity> filterActivities(String searchTerm) {
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            return activityRepository.findAll();
+        }
+        String likePattern = "%" + searchTerm + "%";
+        return activityRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.like(root.get("name"), likePattern));
+            predicates.add(cb.like(root.get("code"), likePattern));
+            return cb.or(predicates.toArray(new Predicate[0]));
+        });
     }
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface IBoardMember {
     Action<BoardMember> saveBoardMember(BoardMemberDTO boardMemberDTO);
     List<BoardMember> findAllBoardMembers();
+    List<BoardMember> filterBoardMembers(String searchTerm);
 }

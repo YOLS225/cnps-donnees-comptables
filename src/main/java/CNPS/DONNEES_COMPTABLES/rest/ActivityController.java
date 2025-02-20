@@ -6,6 +6,7 @@ import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 
 import java.util.List;
 
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,12 @@ public class ActivityController {
     public RestResponse<List<Activity>> findAllActivities() {
         List<Activity> value = activityService.findAllActivities();
         return RestResponse.success(value);
+    }
+
+    @GetMapping("/filter")
+    @Operation(summary = "filter the activities with a term")
+    public List<Activity> filterActivities(@RequestParam String searchTerm) {
+        List<Activity> result=activityService.filterActivities(searchTerm);
+        return result;
     }
 }

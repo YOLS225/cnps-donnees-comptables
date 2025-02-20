@@ -9,4 +9,5 @@ import java.util.List;
 public interface IActivity {
     Action<Activity> saveActivity(ActivityDTO activityDTO);
     List<Activity> findAllActivities();
+    List<Activity> filterActivities(String searchTerm);
 }

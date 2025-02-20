@@ -9,8 +9,10 @@ import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.ActivityRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.BoardMemberRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +57,24 @@ public class BoardMemberService  implements IBoardMember {
     public List<BoardMember> findAllBoardMembers() {
         List<BoardMember> result = boardMemberRepository.findAll();
         return result;
+    }
+
+    @Override
+    public List<BoardMember> filterBoardMembers(String searchTerm) {
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            return boardMemberRepository.findAll();
+        }
+        String likePattern = "%" + searchTerm + "%";
+        return boardMemberRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.like(root.get("lastname"), likePattern));
+            predicates.add(cb.like(root.get("firstname"), likePattern));
+            predicates.add(cb.like(root.get("function"), likePattern));
+            predicates.add(cb.like(root.get("structure"), likePattern));
+            predicates.add(cb.like(root.get("percentage"), likePattern));
+            predicates.add(cb.like(root.get("adress"), likePattern));
+            predicates.add(cb.like(root.get("nationality"), likePattern));
+            return cb.or(predicates.toArray(new Predicate[0]));
+        });
     }
 }

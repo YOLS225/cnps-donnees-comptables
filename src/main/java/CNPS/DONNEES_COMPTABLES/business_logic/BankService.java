@@ -7,10 +7,14 @@ import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.BankRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
+
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import jakarta.persistence.criteria.Predicate;
 
 
 @Service
@@ -24,6 +28,7 @@ public class BankService implements IBank {
         this.bankRepository=bankRepository;
         this.companyRepository=companyRepository;
     }
+
 
     @Override
     public Action<Bank> saveBank(BankDTO bankDTO) {
@@ -55,5 +60,25 @@ public class BankService implements IBank {
     public List<Bank> findAllBanks() {
         List<Bank> result = bankRepository.findAll();
         return result;
+    }
+
+    @Override
+    public List<Bank> filterBanks(String searchTerm) {
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            return bankRepository.findAll();
+        }
+        String likePattern = "%" + searchTerm + "%";
+        return bankRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(cb.like(root.get("name"), likePattern));
+            predicates.add(cb.like(root.get("accountNumber"), likePattern));
+            predicates.add(cb.like(root.get("code"), likePattern));
+            predicates.add(cb.like(root.get("iban"), likePattern));
+            predicates.add(cb.like(root.get("keyRib"), likePattern));
+            predicates.add(cb.like(root.get("windowsCode"), likePattern));
+
+            return cb.or(predicates.toArray(new Predicate[0]));
+        });
     }
 }
