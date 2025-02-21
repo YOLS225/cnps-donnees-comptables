@@ -61,10 +61,11 @@ public class BankController {
         return result;
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     @Operation(summary = "update a bank")
     public ResponseEntity<RestResponse<Bank>> updateCompany(
-            @RequestBody UUID bankId,BankDTO bankDTO) {
+            @RequestParam UUID bankId,
+            @RequestBody BankDTO bankDTO) {
         RestResponse<Bank> restResponse;
         var result = bankService.updateBank(bankId,bankDTO);
         if (result.isOk()) {

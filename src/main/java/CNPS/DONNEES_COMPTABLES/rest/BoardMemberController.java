@@ -50,10 +50,10 @@ public class BoardMemberController {
         return result;
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     @Operation(summary = "update a board-member")
     public ResponseEntity<RestResponse<BoardMember>> updateBoardMember(
-            @RequestBody UUID boardMemberId, BoardMemberDTO boardMemberDTO) {
+            @RequestParam UUID boardMemberId,@RequestBody BoardMemberDTO boardMemberDTO) {
         RestResponse<BoardMember> restResponse;
         var result = boardMemberService.updateBoardMember(boardMemberId,boardMemberDTO);
         if (result.isOk()) {

@@ -56,10 +56,10 @@ public class LeaderController {
         return result;
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     @Operation(summary = "update a leader")
     public ResponseEntity<RestResponse<Leader>> updateLeader(
-            @RequestBody UUID leaderId, LeaderDTO leaderDTO) {
+            @RequestParam UUID leaderId, @RequestBody LeaderDTO leaderDTO) {
         RestResponse<Leader> restResponse;
         var result = leaderService.updateLeader(leaderId,leaderDTO);
         if (result.isOk()) {

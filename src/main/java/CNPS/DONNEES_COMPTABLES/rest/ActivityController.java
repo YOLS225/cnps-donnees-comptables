@@ -52,10 +52,10 @@ public class ActivityController {
         return result;
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     @Operation(summary = "update an activity")
     public ResponseEntity<RestResponse<Activity>> updateActivity(
-            @RequestBody UUID activityId, ActivityDTO activityDTO) {
+            @RequestParam UUID activityId, @RequestBody ActivityDTO activityDTO) {
         RestResponse<Activity> restResponse;
         var result = activityService.updateActivity(activityId,activityDTO);
         if (result.isOk()) {
