@@ -2,8 +2,11 @@ package CNPS.DONNEES_COMPTABLES.rest;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.IBoardMember;
 import CNPS.DONNEES_COMPTABLES.dto.*;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import java.util.List;
+import java.util.UUID;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +21,7 @@ public class BoardMemberController {
         this.boardMemberService=boardMemberService;
     }
 
-    @Operation(summary = "Create board-member")
+    @Operation(summary = "Create a board-member")
     @PostMapping("")
     public ResponseEntity<RestResponse<BoardMember>> saveBoardMember(
             @RequestBody BoardMemberDTO boardMemberDTO) {
@@ -45,6 +48,20 @@ public class BoardMemberController {
     public List<BoardMember> filterBoardMembers(@RequestParam String searchTerm) {
         List<BoardMember> result=boardMemberService.filterBoardMembers(searchTerm);
         return result;
+    }
+
+    @PutMapping("")
+    @Operation(summary = "update a board-member")
+    public ResponseEntity<RestResponse<BoardMember>> updateBoardMember(
+            @RequestBody UUID boardMemberId, BoardMemberDTO boardMemberDTO) {
+        RestResponse<BoardMember> restResponse;
+        var result = boardMemberService.updateBoardMember(boardMemberId,boardMemberDTO);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
     }
 
 }

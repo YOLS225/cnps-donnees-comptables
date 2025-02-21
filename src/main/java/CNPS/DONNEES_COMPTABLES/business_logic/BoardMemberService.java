@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -76,5 +77,28 @@ public class BoardMemberService  implements IBoardMember {
             predicates.add(cb.like(root.get("nationality"), likePattern));
             return cb.or(predicates.toArray(new Predicate[0]));
         });
+    }
+
+    @Override
+    public Action<BoardMember> updateBoardMember(UUID boardMemberId, BoardMemberDTO boardMemberDTO) {
+        try {
+            Optional<BoardMember> recoveredBoardMember=boardMemberRepository.findById(boardMemberId);
+            if (recoveredBoardMember.isPresent()){
+                BoardMember boardMember = recoveredBoardMember.get();
+                boardMember.setFirstName(boardMemberDTO.firstName());
+                boardMember.setLastName(boardMemberDTO.lastName());
+                boardMember.setFunction(boardMemberDTO.function());
+                boardMember.setAddress(boardMemberDTO.adress());
+                boardMember.setStructure(boardMemberDTO.structure());
+                boardMember.setNationality(boardMemberDTO.nationality());
+                return Action.success("BoardMember updated successfully", boardMemberRepository.save(boardMember));
+            }
+            else {
+                throw new RuntimeException("BoardMember not found with id: " + boardMemberId);
+            }
+        }catch (Exception error) {
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -68,5 +69,25 @@ public class ActivityService implements IActivity {
             predicates.add(cb.like(root.get("code"), likePattern));
             return cb.or(predicates.toArray(new Predicate[0]));
         });
+    }
+
+    @Override
+    public Action<Activity> updateActivity(UUID activityId, ActivityDTO activityDTO) {
+        try {
+            Optional<Activity> recoveredActivity=activityRepository.findById(activityId);
+            if (recoveredActivity.isPresent()){
+                Activity activity= recoveredActivity.get();
+
+                //MAJ des informations
+                activity.setName(activityDTO.name());
+                activity.setCode(activityDTO.code());
+                return Action.success("Activity updated successfully", activityRepository.save(activity));
+            }else {
+                throw new RuntimeException("Activity not found with id: " + activityId);
+            }
+        }catch (Exception error) {
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
     }
 }

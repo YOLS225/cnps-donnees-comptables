@@ -2,12 +2,15 @@ package CNPS.DONNEES_COMPTABLES.rest;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.IActivity;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.ILeader;
 import CNPS.DONNEES_COMPTABLES.dto.ActivityDTO;
+import CNPS.DONNEES_COMPTABLES.dto.BankDTO;
 import CNPS.DONNEES_COMPTABLES.dto.LeaderDTO;
 import CNPS.DONNEES_COMPTABLES.dto.RestResponse;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 
 import java.util.List;
+import java.util.UUID;
 
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Leader;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +27,7 @@ public class LeaderController {
         this.leaderService=leaderService;
     }
 
-    @Operation(summary = "Create activity")
+    @Operation(summary = "Create a leader")
     @PostMapping("")
     public ResponseEntity<RestResponse<Leader>> saveLeader(
             @RequestBody LeaderDTO leaderDTO) {
@@ -47,9 +50,23 @@ public class LeaderController {
     }
 
     @GetMapping("/filter")
-    @Operation(summary = "filter the board-members with a term")
+    @Operation(summary = "filter the leaders with a term")
     public List<Leader> filterLeaders(@RequestParam String searchTerm) {
         List<Leader> result=leaderService.filterLeaders(searchTerm);
         return result;
+    }
+
+    @PutMapping("")
+    @Operation(summary = "update a leader")
+    public ResponseEntity<RestResponse<Leader>> updateLeader(
+            @RequestBody UUID leaderId, LeaderDTO leaderDTO) {
+        RestResponse<Leader> restResponse;
+        var result = leaderService.updateLeader(leaderId,leaderDTO);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
     }
 }

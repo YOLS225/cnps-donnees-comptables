@@ -4,6 +4,7 @@ import CNPS.DONNEES_COMPTABLES.business_logic.feature.ILeader;
 import CNPS.DONNEES_COMPTABLES.dto.Action;
 import CNPS.DONNEES_COMPTABLES.dto.LeaderDTO;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Leader;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class LeaderService implements ILeader {
@@ -71,11 +73,32 @@ public class LeaderService implements ILeader {
             predicates.add(cb.like(root.get("firstName"), likePattern));
             predicates.add(cb.like(root.get("function"), likePattern));
             predicates.add(cb.like(root.get("fiscalId"), likePattern));
-            predicates.add(cb.like(root.get("structure"), likePattern));
             predicates.add(cb.like(root.get("percentage"), likePattern));
             predicates.add(cb.like(root.get("adress"), likePattern));
             predicates.add(cb.like(root.get("nationality"), likePattern));
             return cb.or(predicates.toArray(new Predicate[0]));
         });
+    }
+
+    @Override
+    public Action<Leader> updateLeader(UUID leaderId, LeaderDTO leaderDTO) {
+        try {
+            Optional<Leader> recoveredLeader=leaderRepository.findById(leaderId);
+            if (recoveredLeader.isPresent()){
+                Leader leader = recoveredLeader.get();
+                leader.setFirstName(leaderDTO.firstName());
+                leader.setLastName(leaderDTO.lastName());
+                leader.setFunction(leaderDTO.function());
+                leader.setAddress(leaderDTO.adress());
+                leader.setNationality(leaderDTO.nationality());
+                return Action.success("Leader updated successfully", leaderRepository.save(leader));
+            }
+            else {
+                throw new RuntimeException("Leader not found with id: " + leaderId);
+            }
+        }catch (Exception error){
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
     }
 }

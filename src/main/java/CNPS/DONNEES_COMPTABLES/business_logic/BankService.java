@@ -10,10 +10,8 @@ import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import jakarta.persistence.criteria.Predicate;
 
 
@@ -80,5 +78,37 @@ public class BankService implements IBank {
 
             return cb.or(predicates.toArray(new Predicate[0]));
         });
+    }
+
+    @Override
+    public Action<Bank> updateBank(UUID bankId, BankDTO bankDTO) {
+        try {
+            Optional<Bank> recoveredBank = bankRepository.findById(bankId);
+            if (recoveredBank.isPresent()) {
+                Bank bank = recoveredBank.get();
+
+//                // Vérifier si l'entreprise existe et l'affecter
+//                Optional<Company> companyOpt = companyRepository.findById(bankDTO.companyId());
+//                if (companyOpt.isEmpty()) {
+//                    throw new RuntimeException("Company not found with id: " + bankDTO.companyId());
+//                }
+//                bank.setCompany(companyOpt.get());
+
+                // Mise à jour des champs
+                bank.setName(bankDTO.name());
+                bank.setCode(bankDTO.code());
+                bank.setWindowsCode(bankDTO.windowsCode());
+                bank.setAccountNumber(bankDTO.accountNumber());
+                bank.setKeyRib(bankDTO.keyRib());
+                bank.setIban(bankDTO.iban());
+
+                return Action.success("Bank updated successfully", bankRepository.save(bank));
+            } else {
+                throw new RuntimeException("Bank not found with id: " + bankId);
+            }
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
     }
 }

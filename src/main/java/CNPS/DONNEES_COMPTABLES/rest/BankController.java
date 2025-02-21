@@ -32,7 +32,7 @@ public class BankController {
         this.bankService1=bankService1;
     }
 
-    @Operation(summary = "Create bank")
+    @Operation(summary = "Create a bank")
     @PostMapping("")
     public ResponseEntity<RestResponse<Bank>> saveCompany(
             @RequestBody BankDTO bankDTO) {
@@ -59,6 +59,20 @@ public class BankController {
     public List<Bank> filterBanks(@RequestParam String searchTerm) {
         List<Bank> result=bankService.filterBanks(searchTerm);
         return result;
+    }
+
+    @PutMapping("")
+    @Operation(summary = "update a bank")
+    public ResponseEntity<RestResponse<Bank>> updateCompany(
+            @RequestBody UUID bankId,BankDTO bankDTO) {
+        RestResponse<Bank> restResponse;
+        var result = bankService.updateBank(bankId,bankDTO);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
     }
 
 }

@@ -1,10 +1,12 @@
 package CNPS.DONNEES_COMPTABLES.rest;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.IActivity;
 import CNPS.DONNEES_COMPTABLES.dto.ActivityDTO;
+import CNPS.DONNEES_COMPTABLES.dto.BankDTO;
 import CNPS.DONNEES_COMPTABLES.dto.RestResponse;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 
 import java.util.List;
+import java.util.UUID;
 
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,5 +50,19 @@ public class ActivityController {
     public List<Activity> filterActivities(@RequestParam String searchTerm) {
         List<Activity> result=activityService.filterActivities(searchTerm);
         return result;
+    }
+
+    @PutMapping("")
+    @Operation(summary = "update an activity")
+    public ResponseEntity<RestResponse<Activity>> updateActivity(
+            @RequestBody UUID activityId, ActivityDTO activityDTO) {
+        RestResponse<Activity> restResponse;
+        var result = activityService.updateActivity(activityId,activityDTO);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
     }
 }

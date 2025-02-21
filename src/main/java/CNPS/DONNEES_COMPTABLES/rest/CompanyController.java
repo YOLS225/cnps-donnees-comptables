@@ -26,7 +26,7 @@ public class CompanyController {
         this.companyService=companyService;
     }
 
-    @Operation(summary = "Create company")
+    @Operation(summary = "Create a company")
     @PostMapping("")
     public ResponseEntity<RestResponse<Company>> saveCompany(
             @RequestBody CompanyDTO companyDTO) {
