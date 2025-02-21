@@ -8,8 +8,10 @@ import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Leader;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.LeaderRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +57,25 @@ public class LeaderService implements ILeader {
     public List<Leader> findAllLeaders() {
         List<Leader> result = leaderRepository.findAll();
         return result;
+    }
+
+    @Override
+    public List<Leader> filterLeaders(String searchTerm) {
+        if (searchTerm == null || searchTerm.isEmpty()) {
+            return leaderRepository.findAll();
+        }
+        String likePattern = "%" + searchTerm + "%";
+        return leaderRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(cb.like(root.get("lastName"), likePattern));
+            predicates.add(cb.like(root.get("firstName"), likePattern));
+            predicates.add(cb.like(root.get("function"), likePattern));
+            predicates.add(cb.like(root.get("fiscalId"), likePattern));
+            predicates.add(cb.like(root.get("structure"), likePattern));
+            predicates.add(cb.like(root.get("percentage"), likePattern));
+            predicates.add(cb.like(root.get("adress"), likePattern));
+            predicates.add(cb.like(root.get("nationality"), likePattern));
+            return cb.or(predicates.toArray(new Predicate[0]));
+        });
     }
 }

@@ -11,4 +11,5 @@ import java.util.List;
 public interface ILeader {
     Action<Leader> saveLeader(LeaderDTO leaderDTO);
     List<Leader> findAllLeaders();
+    List<Leader> filterLeaders(String searchTerm);
 }

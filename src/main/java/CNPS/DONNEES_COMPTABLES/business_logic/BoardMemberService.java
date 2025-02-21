@@ -67,8 +67,8 @@ public class BoardMemberService  implements IBoardMember {
         String likePattern = "%" + searchTerm + "%";
         return boardMemberRepository.findAll((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.like(root.get("lastname"), likePattern));
-            predicates.add(cb.like(root.get("firstname"), likePattern));
+            predicates.add(cb.like(root.get("lastName"), likePattern));
+            predicates.add(cb.like(root.get("firstName"), likePattern));
             predicates.add(cb.like(root.get("function"), likePattern));
             predicates.add(cb.like(root.get("structure"), likePattern));
             predicates.add(cb.like(root.get("percentage"), likePattern));

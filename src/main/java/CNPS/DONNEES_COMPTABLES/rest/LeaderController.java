@@ -8,6 +8,7 @@ import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 
 import java.util.List;
 
+import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Leader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,5 +44,12 @@ public class LeaderController {
     public RestResponse<List<Leader>> findAllLeaders() {
         List<Leader> value = leaderService.findAllLeaders();
         return RestResponse.success(value);
+    }
+
+    @GetMapping("/filter")
+    @Operation(summary = "filter the board-members with a term")
+    public List<Leader> filterLeaders(@RequestParam String searchTerm) {
+        List<Leader> result=leaderService.filterLeaders(searchTerm);
+        return result;
     }
 }
