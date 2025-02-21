@@ -9,6 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class Startup implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(Startup.class);
+    private final Seed seed;
+
+    public Startup(Seed seed){
+        this.seed=seed;
+    }
 
     @Value("${server.port}")
     private int serverPort;
@@ -18,5 +23,6 @@ public class Startup implements CommandLineRunner {
         log.info("App Startup ...");
         System.out.println("Server   : http://localhost:" + serverPort);
         System.out.println("Swagger  : http://localhost:" + serverPort + "/swagger-ui/index.html");
+        seed.run();
     }
 }

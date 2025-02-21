@@ -37,6 +37,9 @@ public class BoardMember {
     @Column(name = "nationality")
     private String nationality;
 
+    @OneToOne
+    private Status status;
+
     @ManyToOne
     private Company company;
 }

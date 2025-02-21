@@ -22,6 +22,9 @@ public class Activity {
     @Column(name = "code",unique = true)
     private String code;
 
+    @OneToOne
+    private Status status;
+
     @ManyToOne
     private Company company;
 }
