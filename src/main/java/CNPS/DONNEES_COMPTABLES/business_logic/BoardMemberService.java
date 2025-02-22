@@ -6,9 +6,11 @@ import CNPS.DONNEES_COMPTABLES.dto.BoardMemberDTO;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Status;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.ActivityRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.BoardMemberRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
+import CNPS.DONNEES_COMPTABLES.jpa.repository.StatusRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +24,23 @@ import java.util.UUID;
 public class BoardMemberService  implements IBoardMember {
     private final CompanyRepository companyRepository;
     private final BoardMemberRepository boardMemberRepository;
+    private final StatusRepository statusRepository;
 
     public BoardMemberService(CompanyRepository companyRepository,
-                       BoardMemberRepository boardMemberRepository){
+                       BoardMemberRepository boardMemberRepository,
+                              StatusRepository statusRepository){
         this.companyRepository=companyRepository;
         this.boardMemberRepository=boardMemberRepository;
+        this.statusRepository=statusRepository;
     }
     @Override
     public Action<BoardMember> saveBoardMember(BoardMemberDTO boardMemberDTO) {
         try {
-            Optional<Company> company = companyRepository.findById(boardMemberDTO.companyId());
-            if (company.isPresent()){
-                Company company1 = company.get();
+            Optional<Company> recoveredCompany = companyRepository.findById(boardMemberDTO.companyId());
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel(boardMemberDTO.statusLabel());
+            if (recoveredCompany.isPresent() && recoveredStatus.isPresent()){
+                Company company = recoveredCompany.get();
+                Status status=recoveredStatus.get();
                 BoardMember boardMember = BoardMember.builder()
                         .firstName(boardMemberDTO.firstName())
                         .lastName(boardMemberDTO.lastName())
@@ -42,7 +49,8 @@ public class BoardMemberService  implements IBoardMember {
                         .address(boardMemberDTO.adress())
                         .nationality(boardMemberDTO.nationality())
                         .percentage(boardMemberDTO.percentage())
-                        .company(company1)
+                        .status(status)
+                        .company(company)
                         .build();
                 return Action.success("BoardMember:created",boardMemberRepository.save(boardMember));}
             else {
@@ -92,6 +100,26 @@ public class BoardMemberService  implements IBoardMember {
                 boardMember.setStructure(boardMemberDTO.structure());
                 boardMember.setNationality(boardMemberDTO.nationality());
                 return Action.success("BoardMember updated successfully", boardMemberRepository.save(boardMember));
+            }
+            else {
+                throw new RuntimeException("BoardMember not found with id: " + boardMemberId);
+            }
+        }catch (Exception error) {
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
+    }
+
+    @Override
+    public Action<BoardMember> deleteBoardMember(UUID boardMemberId) {
+        try {
+            Optional<BoardMember> recoveredBoardMember=boardMemberRepository.findById(boardMemberId);
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel("INACTIVE");
+            if (recoveredBoardMember.isPresent() && recoveredStatus.isPresent()){
+                BoardMember boardMember = recoveredBoardMember.get();
+                Status status = recoveredStatus.get();
+                boardMember.setStatus(status);
+                return Action.success("BoardMember deleted successfully", boardMemberRepository.save(boardMember));
             }
             else {
                 throw new RuntimeException("BoardMember not found with id: " + boardMemberId);

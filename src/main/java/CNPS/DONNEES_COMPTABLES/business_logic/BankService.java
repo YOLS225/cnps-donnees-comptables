@@ -5,9 +5,11 @@ import CNPS.DONNEES_COMPTABLES.dto.Action;
 import CNPS.DONNEES_COMPTABLES.dto.BankDTO;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Status;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.BankRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
 
+import CNPS.DONNEES_COMPTABLES.jpa.repository.StatusRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,11 +22,14 @@ public class BankService implements IBank {
 
     private  final BankRepository bankRepository;
     private final CompanyRepository companyRepository;
+    private final StatusRepository statusRepository;
 
     public BankService(BankRepository bankRepository,
-                       CompanyRepository companyRepository){
+                       CompanyRepository companyRepository,
+                       StatusRepository statusRepository){
         this.bankRepository=bankRepository;
         this.companyRepository=companyRepository;
+        this.statusRepository=statusRepository;
     }
 
 
@@ -32,9 +37,11 @@ public class BankService implements IBank {
     public Action<Bank> saveBank(BankDTO bankDTO) {
 
         try {
-            Optional<Company> company = companyRepository.findById(bankDTO.companyId());
-            if (company.isPresent()){
-                Company company1 = company.get();
+            Optional<Company> recoveredCompany = companyRepository.findById(bankDTO.companyId());
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel(bankDTO.statusLabel());
+            if (recoveredCompany.isPresent() && recoveredStatus.isPresent()){
+                Company company = recoveredCompany.get();
+                Status status=recoveredStatus.get();
             Bank bank = Bank.builder()
                     .name(bankDTO.name())
                     .code(bankDTO.code())
@@ -42,7 +49,8 @@ public class BankService implements IBank {
                     .accountNumber(bankDTO.accountNumber())
                     .keyRib(bankDTO.keyRib())
                     .iban(bankDTO.iban())
-                    .company(company1)
+                    .status(status)
+                    .company(company)
                     .build();
             return Action.success("Bank:created",bankRepository.save(bank));}
             else {
@@ -86,15 +94,6 @@ public class BankService implements IBank {
             Optional<Bank> recoveredBank = bankRepository.findById(bankId);
             if (recoveredBank.isPresent()) {
                 Bank bank = recoveredBank.get();
-
-//                // Vérifier si l'entreprise existe et l'affecter
-//                Optional<Company> companyOpt = companyRepository.findById(bankDTO.companyId());
-//                if (companyOpt.isEmpty()) {
-//                    throw new RuntimeException("Company not found with id: " + bankDTO.companyId());
-//                }
-//                bank.setCompany(companyOpt.get());
-
-                // Mise à jour des champs
                 bank.setName(bankDTO.name());
                 bank.setCode(bankDTO.code());
                 bank.setWindowsCode(bankDTO.windowsCode());
@@ -102,6 +101,25 @@ public class BankService implements IBank {
                 bank.setKeyRib(bankDTO.keyRib());
                 bank.setIban(bankDTO.iban());
 
+                return Action.success("Bank updated successfully", bankRepository.save(bank));
+            } else {
+                throw new RuntimeException("Bank not found with id: " + bankId);
+            }
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
+    }
+
+    @Override
+    public Action<Bank> deleteBank(UUID bankId) {
+        try {
+            Optional<Bank> recoveredBank = bankRepository.findById(bankId);
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel("INACTIVE");
+            if (recoveredBank.isPresent() && recoveredStatus.isPresent()) {
+                Status status = recoveredStatus.get();
+                Bank bank = recoveredBank.get();
+                bank.setStatus(status);
                 return Action.success("Bank updated successfully", bankRepository.save(bank));
             } else {
                 throw new RuntimeException("Bank not found with id: " + bankId);

@@ -69,4 +69,18 @@ public class LeaderController {
         }
         return ResponseEntity.ok(restResponse);
     }
+
+    @PutMapping("delete/{id}")
+    @Operation(summary = "delete a leader")
+    public ResponseEntity<RestResponse<Leader>> deleteLeader(
+            @RequestParam UUID leaderId) {
+        RestResponse<Leader> restResponse;
+        var result = leaderService.deleteLeader(leaderId);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
+    }
 }

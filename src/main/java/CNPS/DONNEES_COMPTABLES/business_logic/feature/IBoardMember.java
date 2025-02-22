@@ -13,4 +13,5 @@ public interface IBoardMember {
     List<BoardMember> findAllBoardMembers();
     List<BoardMember> filterBoardMembers(String searchTerm);
     Action<BoardMember> updateBoardMember(UUID boardMemberId, BoardMemberDTO boardMemberDTO);
+    Action<BoardMember> deleteBoardMember(UUID boardMemberId);
 }

@@ -14,4 +14,5 @@ public interface ILeader {
     List<Leader> findAllLeaders();
     List<Leader> filterLeaders(String searchTerm);
     Action<Leader> updateLeader(UUID leaderId, LeaderDTO leaderDTO);
+    Action<Leader> deleteLeader(UUID leaderId);
 }

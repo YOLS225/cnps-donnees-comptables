@@ -11,6 +11,7 @@ public record BankDTO(
       String accountNumber,
       String keyRib,
       String iban,
+      String statusLabel,
       UUID companyId
 ) {
 }

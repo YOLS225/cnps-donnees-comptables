@@ -10,6 +10,7 @@ public record BoardMemberDTO(
         Float percentage,
         String adress,
         String nationality,
+        String statusLabel,
         UUID companyId
 ) {
 }

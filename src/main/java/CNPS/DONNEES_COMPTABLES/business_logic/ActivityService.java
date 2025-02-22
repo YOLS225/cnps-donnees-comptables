@@ -6,8 +6,10 @@ import CNPS.DONNEES_COMPTABLES.dto.ActivityDTO;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Bank;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Status;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.ActivityRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
+import CNPS.DONNEES_COMPTABLES.jpa.repository.StatusRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Service;
 
@@ -22,24 +24,30 @@ public class ActivityService implements IActivity {
 
     private final CompanyRepository companyRepository;
     private final ActivityRepository activityRepository;
+    private final StatusRepository statusRepository;
 
     public ActivityService(CompanyRepository companyRepository,
-                           ActivityRepository activityRepository){
+                           ActivityRepository activityRepository,
+                           StatusRepository statusRepository){
         this.companyRepository=companyRepository;
         this.activityRepository=activityRepository;
+        this.statusRepository=statusRepository;
     }
 
 
     @Override
     public Action<Activity> saveActivity(ActivityDTO activityDTO) {
         try {
-            Optional<Company> company = companyRepository.findById(activityDTO.companyId());
-            if (company.isPresent()){
-                Company company1 = company.get();
+            Optional<Company> recoveredCompany = companyRepository.findById(activityDTO.companyId());
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel(activityDTO.statusLabel());
+            if (recoveredCompany.isPresent() && recoveredStatus.isPresent()){
+                Company company = recoveredCompany.get();
+                Status status=recoveredStatus.get();
                 Activity activity = Activity.builder()
                         .name(activityDTO.name())
                         .code(activityDTO.code())
-                        .company(company1)
+                        .status(status)
+                        .company(company)
                         .build();
                 return Action.success("Activity:created",activityRepository.save(activity));}
             else {
@@ -77,11 +85,31 @@ public class ActivityService implements IActivity {
             Optional<Activity> recoveredActivity=activityRepository.findById(activityId);
             if (recoveredActivity.isPresent()){
                 Activity activity= recoveredActivity.get();
-
                 //MAJ des informations
                 activity.setName(activityDTO.name());
                 activity.setCode(activityDTO.code());
                 return Action.success("Activity updated successfully", activityRepository.save(activity));
+            }else {
+                throw new RuntimeException("Activity not found with id: " + activityId);
+            }
+        }catch (Exception error) {
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
+    }
+
+    @Override
+    public Action<Activity> deleteActivity(UUID activityId) {
+        try {
+            Optional<Activity> recoveredActivity=activityRepository.findById(activityId);
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel("INACTIVE");
+            if (recoveredActivity.isPresent() && recoveredStatus.isPresent()){
+                Activity activity= recoveredActivity.get();
+                Status status = recoveredStatus.get();
+
+                //MAJ des informations
+                activity.setStatus(status);
+                return Action.success("Activity deleted successfully", activityRepository.save(activity));
             }else {
                 throw new RuntimeException("Activity not found with id: " + activityId);
             }

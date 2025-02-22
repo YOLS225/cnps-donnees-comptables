@@ -3,12 +3,10 @@ package CNPS.DONNEES_COMPTABLES.business_logic;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.ILeader;
 import CNPS.DONNEES_COMPTABLES.dto.Action;
 import CNPS.DONNEES_COMPTABLES.dto.LeaderDTO;
-import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
-import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
-import CNPS.DONNEES_COMPTABLES.jpa.entity.Company;
-import CNPS.DONNEES_COMPTABLES.jpa.entity.Leader;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.*;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.CompanyRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.LeaderRepository;
+import CNPS.DONNEES_COMPTABLES.jpa.repository.StatusRepository;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +19,25 @@ import java.util.UUID;
 public class LeaderService implements ILeader {
     private final CompanyRepository companyRepository;
     private final LeaderRepository leaderRepository;
+    private final StatusRepository statusRepository;
 
     public LeaderService(CompanyRepository companyRepository,
-                         LeaderRepository leaderRepository){
+                         LeaderRepository leaderRepository,
+                         StatusRepository statusRepository){
         this.companyRepository=companyRepository;
         this.leaderRepository=leaderRepository;
+        this.statusRepository=statusRepository;
     }
 
 
     @Override
     public Action<Leader> saveLeader(LeaderDTO leaderDTO) {
         try {
-            Optional<Company> company = companyRepository.findById(leaderDTO.companyId());
-            if (company.isPresent()){
-                Company company1 = company.get();
+            Optional<Company> recoveredCompany = companyRepository.findById(leaderDTO.companyId());
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel(leaderDTO.statusLabel());
+            if (recoveredCompany.isPresent() && recoveredStatus.isPresent()){
+                Company company = recoveredCompany.get();
+                Status status=recoveredStatus.get();
                 Leader leader = Leader.builder()
                         .firstName(leaderDTO.firstName())
                         .lastName(leaderDTO.lastName())
@@ -43,7 +46,8 @@ public class LeaderService implements ILeader {
                         .function(leaderDTO.function())
                         .nationality(leaderDTO.nationality())
                         .fiscalId(leaderDTO.fiscalId())
-                        .company(company1)
+                        .status(status)
+                        .company(company)
                         .build();
                 return Action.success("Leader:created",leaderRepository.save(leader));}
             else {
@@ -92,6 +96,26 @@ public class LeaderService implements ILeader {
                 leader.setAddress(leaderDTO.adress());
                 leader.setNationality(leaderDTO.nationality());
                 return Action.success("Leader updated successfully", leaderRepository.save(leader));
+            }
+            else {
+                throw new RuntimeException("Leader not found with id: " + leaderId);
+            }
+        }catch (Exception error){
+            System.out.println(error.getMessage());
+            return Action.fail("Erreur : " + error.getMessage());
+        }
+    }
+
+    @Override
+    public Action<Leader> deleteLeader(UUID leaderId) {
+        try {
+            Optional<Leader> recoveredLeader=leaderRepository.findById(leaderId);
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel("INACTIVE");
+            if (recoveredLeader.isPresent() && recoveredStatus.isPresent()){
+                Leader leader = recoveredLeader.get();
+                Status status = recoveredStatus.get();
+                leader.setStatus(status);
+                return Action.success("Leader deleted successfully", leaderRepository.save(leader));
             }
             else {
                 throw new RuntimeException("Leader not found with id: " + leaderId);

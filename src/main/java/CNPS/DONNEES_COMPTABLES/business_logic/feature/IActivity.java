@@ -12,4 +12,5 @@ public interface IActivity {
     List<Activity> findAllActivities();
     List<Activity> filterActivities(String searchTerm);
     Action<Activity> updateActivity(UUID activityId, ActivityDTO activityDTO);
+    Action<Activity> deleteActivity(UUID activityId);
 }

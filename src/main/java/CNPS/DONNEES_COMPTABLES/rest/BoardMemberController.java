@@ -64,4 +64,18 @@ public class BoardMemberController {
         return ResponseEntity.ok(restResponse);
     }
 
+    @PutMapping("delete/{id}")
+    @Operation(summary = "delete a board-member")
+    public ResponseEntity<RestResponse<BoardMember>> deleteBoardMember(
+            @RequestParam UUID boardMemberId) {
+        RestResponse<BoardMember> restResponse;
+        var result = boardMemberService.deleteBoardMember(boardMemberId);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
+    }
+
 }

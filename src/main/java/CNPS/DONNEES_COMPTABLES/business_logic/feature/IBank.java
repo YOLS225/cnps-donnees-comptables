@@ -13,4 +13,5 @@ public interface IBank {
     List<Bank> findAllBanks();
     List<Bank> filterBanks(String searchTerm);
     Action<Bank> updateBank(UUID bankId, BankDTO bankDTO);
+    Action<Bank> deleteBank(UUID bankId);
 }

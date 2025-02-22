@@ -36,7 +36,7 @@ public class Bank {
     @Column(name = "iban")
     private String iban;
 
-    @OneToOne
+    @ManyToOne
     private Status status;
 
     @ManyToOne

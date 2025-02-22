@@ -37,7 +37,7 @@ public class BoardMember {
     @Column(name = "nationality")
     private String nationality;
 
-    @OneToOne
+    @ManyToOne
     private Status status;
 
     @ManyToOne

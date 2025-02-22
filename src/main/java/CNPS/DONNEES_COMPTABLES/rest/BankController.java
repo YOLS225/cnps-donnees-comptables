@@ -63,11 +63,25 @@ public class BankController {
 
     @PutMapping("/{id}")
     @Operation(summary = "update a bank")
-    public ResponseEntity<RestResponse<Bank>> updateCompany(
+    public ResponseEntity<RestResponse<Bank>> updateBank(
             @RequestParam UUID bankId,
             @RequestBody BankDTO bankDTO) {
         RestResponse<Bank> restResponse;
         var result = bankService.updateBank(bankId,bankDTO);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
+    }
+
+    @PutMapping("delete/{id}")
+    @Operation(summary = "delete a bank")
+    public ResponseEntity<RestResponse<Bank>> deleteBank(
+            @RequestParam UUID bankId) {
+        RestResponse<Bank> restResponse;
+        var result = bankService.deleteBank(bankId);
         if (result.isOk()) {
             restResponse = RestResponse.success(result.getMessage(), result.getResult());
         } else {

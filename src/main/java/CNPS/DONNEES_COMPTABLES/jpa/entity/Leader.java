@@ -34,7 +34,7 @@ public class Leader {
     @Column(name = "nationality")
     private String nationality;
 
-    @OneToOne
+    @ManyToOne
     private Status status;
 
     @ManyToOne

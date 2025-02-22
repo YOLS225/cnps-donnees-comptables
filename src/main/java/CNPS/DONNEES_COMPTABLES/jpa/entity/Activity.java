@@ -22,7 +22,7 @@ public class Activity {
     @Column(name = "code",unique = true)
     private String code;
 
-    @OneToOne
+    @ManyToOne
     private Status status;
 
     @ManyToOne

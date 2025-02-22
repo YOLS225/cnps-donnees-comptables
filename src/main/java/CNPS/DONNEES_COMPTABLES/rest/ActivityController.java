@@ -65,4 +65,18 @@ public class ActivityController {
         }
         return ResponseEntity.ok(restResponse);
     }
+
+    @PutMapping("delete/{id}")
+    @Operation(summary = "delete an activity")
+    public ResponseEntity<RestResponse<Activity>> deleteActivity(
+            @RequestParam UUID activityId) {
+        RestResponse<Activity> restResponse;
+        var result = activityService.deleteActivity(activityId);
+        if (result.isOk()) {
+            restResponse = RestResponse.success(result.getMessage(), result.getResult());
+        } else {
+            restResponse = RestResponse.fail(result.getMessage(), null);
+        }
+        return ResponseEntity.ok(restResponse);
+    }
 }
