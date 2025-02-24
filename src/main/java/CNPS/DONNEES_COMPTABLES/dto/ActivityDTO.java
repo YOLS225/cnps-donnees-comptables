@@ -5,7 +5,6 @@ import java.util.UUID;
 public record ActivityDTO(
         String name,
         String code,
-        String statusLabel,
         UUID companyId
 ) {
 }

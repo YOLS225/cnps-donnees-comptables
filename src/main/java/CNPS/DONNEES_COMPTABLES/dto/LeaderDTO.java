@@ -9,7 +9,6 @@ public record LeaderDTO(
         String nationality,
         String fiscalId,
         String adress,
-        String statusLabel,
         UUID companyId
 ) {
 }

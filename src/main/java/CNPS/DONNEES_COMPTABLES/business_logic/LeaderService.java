@@ -34,7 +34,7 @@ public class LeaderService implements ILeader {
     public Action<Leader> saveLeader(LeaderDTO leaderDTO) {
         try {
             Optional<Company> recoveredCompany = companyRepository.findById(leaderDTO.companyId());
-            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel(leaderDTO.statusLabel());
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel("ACTIVE");
             if (recoveredCompany.isPresent() && recoveredStatus.isPresent()){
                 Company company = recoveredCompany.get();
                 Status status=recoveredStatus.get();

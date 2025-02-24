@@ -38,7 +38,7 @@ public class BankService implements IBank {
 
         try {
             Optional<Company> recoveredCompany = companyRepository.findById(bankDTO.companyId());
-            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel(bankDTO.statusLabel());
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel("ACTIVE");
             if (recoveredCompany.isPresent() && recoveredStatus.isPresent()){
                 Company company = recoveredCompany.get();
                 Status status=recoveredStatus.get();

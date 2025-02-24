@@ -37,7 +37,7 @@ public class BoardMemberService  implements IBoardMember {
     public Action<BoardMember> saveBoardMember(BoardMemberDTO boardMemberDTO) {
         try {
             Optional<Company> recoveredCompany = companyRepository.findById(boardMemberDTO.companyId());
-            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel(boardMemberDTO.statusLabel());
+            Optional<Status> recoveredStatus=statusRepository.findStatusByLabel("ACTIVE");
             if (recoveredCompany.isPresent() && recoveredStatus.isPresent()){
                 Company company = recoveredCompany.get();
                 Status status=recoveredStatus.get();
