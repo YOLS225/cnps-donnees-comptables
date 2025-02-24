@@ -3,7 +3,9 @@ package CNPS.DONNEES_COMPTABLES.business_logic;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.IAccountingPlan;
 import CNPS.DONNEES_COMPTABLES.dto.Action;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.AccountingPlan;
+import CNPS.DONNEES_COMPTABLES.jpa.repository.AccountClassRepository;
 import CNPS.DONNEES_COMPTABLES.jpa.repository.AccoutingPlanRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -21,8 +23,11 @@ import java.util.List;
 @Service
 public class AccountingPlanService implements IAccountingPlan {
     private final AccoutingPlanRepository accoutingPlanRepository;
-    public AccountingPlanService(AccoutingPlanRepository accoutingPlanRepository){
+    private final AccountClassRepository accountClassRepository;
+    public AccountingPlanService(AccoutingPlanRepository accoutingPlanRepository,
+                                 AccountClassRepository accountClassRepository){
         this.accoutingPlanRepository=accoutingPlanRepository;
+        this.accountClassRepository=accountClassRepository;
     }
 
     @Override
@@ -45,4 +50,28 @@ public class AccountingPlanService implements IAccountingPlan {
             return Action.fail("Error loading file: " + e.getMessage(), null);
         }
     }
+
+
+    public List<AccountingPlan> sortAccountingPlan() {
+        List<String> parent = accountClassRepository.findDistinctParent();
+        List<AccountingPlan> recoveredAccountingPlan = accoutingPlanRepository.findAll();
+        List<AccountingPlan> result = new ArrayList<>();
+        System.out.println("============size parent:============== " + parent.size());
+
+        for (int i = 0; i < parent.size(); i++) {
+            String element = parent.get(i);
+            System.out.println("voir parent:" + element);
+
+            for (AccountingPlan account : recoveredAccountingPlan) {
+                // Si le numberAccount commence par le parent
+                if (account.getNumberAccount().startsWith(element)) {
+                    result.add(account);
+                }
+            }
+        }
+
+        // Retourner la liste aplatie de comptes comptables
+        return result;
+    }
+
 }

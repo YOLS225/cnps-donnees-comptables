@@ -5,6 +5,8 @@ import CNPS.DONNEES_COMPTABLES.business_logic.feature.IBoardMember;
 import CNPS.DONNEES_COMPTABLES.dto.*;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import java.util.List;
+
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Leader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
@@ -33,5 +35,17 @@ public class AccountClassController {
             restResponse = RestResponse.fail(result.getMessage(), null);
         }
         return ResponseEntity.ok(restResponse);
+    }
+
+    @GetMapping("")
+    @Operation(summary = "Get all Parents from accounting-plan")
+    public RestResponse<List<String>> findAllParents() {
+        List<String> value = accountClassService.findAllParent();
+
+        for (int i=0;i<value.size();i++){
+            String element= value.get(i);
+            System.out.println("*****************voir element :"+element+" *****************");
+        }
+        return RestResponse.success(value);
     }
 }

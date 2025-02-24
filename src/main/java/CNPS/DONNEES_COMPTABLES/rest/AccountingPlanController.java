@@ -2,6 +2,8 @@ package CNPS.DONNEES_COMPTABLES.rest;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.IAccountingPlan;
 import CNPS.DONNEES_COMPTABLES.business_logic.feature.IBoardMember;
 import CNPS.DONNEES_COMPTABLES.dto.*;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.AccountingPlan;
+import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,4 +35,16 @@ public class AccountingPlanController {
         }
         return ResponseEntity.ok(restResponse);
     }
+
+    @Operation(summary = "sort a account-plan")
+    @GetMapping("")
+    public List<AccountingPlan> saveAccountingPlan() {
+        List<AccountingPlan> value =accountingPlanService.sortAccountingPlan();
+        return value;
+    }
+
+
+
+
+
 }

@@ -50,5 +50,9 @@ public class AccountClassService implements IAccountClass {
         }
     }
 
+    public  List<String>findAllParent(){
+        return accountClassRepository.findDistinctParent();
+    }
+
 }
 
