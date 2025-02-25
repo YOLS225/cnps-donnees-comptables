@@ -6,6 +6,8 @@ import CNPS.DONNEES_COMPTABLES.jpa.entity.AccountingPlan;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.Activity;
 import CNPS.DONNEES_COMPTABLES.jpa.entity.BoardMember;
 import java.util.List;
+import java.util.Map;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
@@ -38,8 +40,8 @@ public class AccountingPlanController {
 
     @Operation(summary = "sort a account-plan")
     @GetMapping("")
-    public List<AccountingPlan> saveAccountingPlan() {
-        List<AccountingPlan> value =accountingPlanService.sortAccountingPlan();
+    public List<Map<String, Object>> saveAccountingPlan() {
+        List<Map<String, Object>> value =accountingPlanService.sortAccountingPlan();
         return value;
     }
 

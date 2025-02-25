@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IAccountClass {
     Action<String> loadAccountClass(MultipartFile file);
-    List<String> findAllParent();
+    List<List<String>> findAllParent();
 }

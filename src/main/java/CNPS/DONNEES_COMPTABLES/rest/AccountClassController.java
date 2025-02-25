@@ -39,13 +39,14 @@ public class AccountClassController {
 
     @GetMapping("")
     @Operation(summary = "Get all Parents from accounting-plan")
-    public RestResponse<List<String>> findAllParents() {
-        List<String> value = accountClassService.findAllParent();
+    public RestResponse<List<List<String>>> findAllParents() {
+        List<List<String>> value = accountClassService.findAllParent();
 
-        for (int i=0;i<value.size();i++){
-            String element= value.get(i);
-            System.out.println("*****************voir element :"+element+" *****************");
-        }
+//        for (int i=0;i<value.size();i++){
+//            List<String> element= value.get(i);
+//            System.out.println("*****************voir element :"+element+" *****************");
+//            System.out.println("*****************voir subelement1 :"+element.get(0)+"voir subelement2:"+element.get(1)+"voir subelement3:"+element.get(2)+ "*****************");
+//        }
         return RestResponse.success(value);
     }
 }

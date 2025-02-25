@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountingPlanService implements IAccountingPlan {
@@ -52,26 +52,79 @@ public class AccountingPlanService implements IAccountingPlan {
     }
 
 
-    public List<AccountingPlan> sortAccountingPlan() {
-        List<String> parent = accountClassRepository.findDistinctParent();
+    public List<Map<String, Object>> sortAccountingPlan() {
+        List<List<String>> rawParents = accountClassRepository.findDistinctParent();
         List<AccountingPlan> recoveredAccountingPlan = accoutingPlanRepository.findAll();
-        List<AccountingPlan> result = new ArrayList<>();
-        System.out.println("============size parent:============== " + parent.size());
 
-        for (int i = 0; i < parent.size(); i++) {
-            String element = parent.get(i);
-            System.out.println("voir parent:" + element);
+        // Utiliser LinkedHashMap pour conserver l'ordre
+        Map<String, Map<String, Object>> nodeMap = new LinkedHashMap<>();
+        Set<String> childReferences = new HashSet<>(); // Pour suivre les références qui sont déjà enfants
 
-            for (AccountingPlan account : recoveredAccountingPlan) {
-                // Si le numberAccount commence par le parent
-                if (account.getNumberAccount().startsWith(element)) {
-                    result.add(account);
+        // Trier les parents par référence
+        rawParents.sort(Comparator.comparing(row -> row.get(0)));
+
+        for (List<String> row : rawParents) {
+            String reference = row.get(0);
+            String label = row.get(1);
+            String parent = row.size() > 2 ? row.get(2) : null;
+
+            Map<String, Object> node = nodeMap.computeIfAbsent(reference, k -> new LinkedHashMap<>());
+            node.put("reference", reference);
+            node.put("label", label);
+            node.putIfAbsent("children", new ArrayList<>());
+
+            nodeMap.put(reference, node);
+
+            if (parent != null && !parent.isEmpty()) {
+                Map<String, Object> parentNode = nodeMap.computeIfAbsent(parent, k -> new LinkedHashMap<>());
+                parentNode.putIfAbsent("children", new ArrayList<>());
+                ((List<Map<String, Object>>) parentNode.get("children")).add(node);
+                childReferences.add(reference); // Marquer cette référence comme enfant
+            }
+        }
+
+        // Trier les comptes récupérés
+        recoveredAccountingPlan.sort(Comparator.comparing(AccountingPlan::getNumberAccount));
+
+        for (AccountingPlan account : recoveredAccountingPlan) {
+            String numberAccount = account.getNumberAccount();
+
+            for (String reference : nodeMap.keySet()) {
+                if (numberAccount.startsWith(reference)) {
+                    Map<String, Object> parentNode = nodeMap.get(reference);
+                    List<Map<String, Object>> children = (List<Map<String, Object>>) parentNode.get("children");
+
+                    Map<String, Object> accountNode = new LinkedHashMap<>();
+                    accountNode.put("numberAccount", account.getNumberAccount());
+                    accountNode.put("description", account.getDescription());
+                    accountNode.put("type", account.getType());
+
+                    children.add(accountNode);
+                    break;
                 }
             }
         }
 
-        // Retourner la liste aplatie de comptes comptables
-        return result;
+        // Trier les enfants de chaque nœud par référence
+        for (Map<String, Object> node : nodeMap.values()) {
+            List<Map<String, Object>> children = (List<Map<String, Object>>) node.get("children");
+            children.sort(Comparator.comparing(child -> (String) child.get("reference"), Comparator.nullsLast(String::compareTo)));
+        }
+
+        // 🔥 Filtrer pour :
+        // 1️⃣ Ne garder que ceux qui ont des enfants
+        // 2️⃣ Exclure ceux qui sont déjà des enfants d'un autre élément
+        return nodeMap.entrySet()
+                .stream()
+                .filter(entry -> !childReferences.contains(entry.getKey()) && !((List<?>) entry.getValue().get("children")).isEmpty())
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
     }
+
+
+
+
+
+
 
 }
